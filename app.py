@@ -14,6 +14,10 @@ app.secret_key = config.secret_key
 def index():
     return render_template("index.html")
 
+@app.route("/kokemukset")
+def kokemukset():
+    return render_template("kokemukset.html")
+
 @app.route("/register")
 def register():
     return render_template("register.html")
@@ -34,6 +38,27 @@ def create():
         return "VIRHE: tunnus on jo varattu"
 
     return "Tunnus luotu"
+
+@app.route("/create_kokemus", methods=["POST"])
+def create_kokemus():
+    title = request.form["title"]
+    description = request.form["description"]
+    rating = request.form["rating"]
+    
+    if "username" not in session:
+        return '''
+        <p><strong>Et ole kirjautunut sisään.</strong></p>
+        <p><a href="/login">Kirjaudu sisään</a></p>
+        ''', 401
+
+    username = session["username"]
+    sql = "SELECT id FROM users WHERE username = ?"
+    user_id = db.query(sql, [username])[0][0]
+
+    sql = "INSERT INTO experiences (title, description, user_id, rating) VALUES (?, ?, ?, ?)"
+    db.execute(sql, [title, description, user_id, rating])
+
+    return redirect("/")
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -57,3 +82,4 @@ def login():
 def logout():
     del session["username"]
     return redirect("/")
+

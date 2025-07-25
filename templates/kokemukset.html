@@ -1,0 +1,30 @@
+    </p>
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Uusi kokemus</title>
+</head>
+
+<body>
+  <h1>Uusi ilmoitus</h1>
+  <form action="/create_kokemus" method="post">
+    <p>
+      Otsikko: <br />
+      <input type="text" name="title" />
+    </p>
+    <p>
+      Kuvaus: <br />
+      <textarea name="description" rows="8" cols="60"></textarea>
+    </p>
+    <p>
+      Arvosana (1-5): <br />
+      <input type="radio" name="rating" value="1" /> 1
+      <input type="radio" name="rating" value="2" /> 2
+      <input type="radio" name="rating" value="3" /> 3
+      <input type="radio" name="rating" value="4" /> 4
+      <input type="radio" name="rating" value="5" /> 5
+    </p>
+    <input type="submit" value="Lähetä" />
+  
+</html>
