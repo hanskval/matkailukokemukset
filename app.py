@@ -53,7 +53,7 @@ def create():
     except sqlite3.IntegrityError:
         return "VIRHE: tunnus on jo varattu"
 
-    return "Tunnus luotu"
+    return redirect("/")
 
 @app.route("/create_kokemus", methods=["POST"])
 def create_kokemus():
@@ -102,13 +102,18 @@ def login():
         password = request.form["password"]
 
         sql = "SELECT password_hash FROM users WHERE username = ?"
-        password_hash = db.query(sql, [username])[0][0]
+        results = db.query(sql, [username])
+        if results:
+            password_hash = results[0][0]
+        else:
+            return render_template("login.html", error="Väärä tunnus tai salasana")
 
         if check_password_hash(password_hash, password):
             session["username"] = username
             return redirect("/")
         else:
-            return "VIRHE: väärä tunnus tai salasana"
+            return render_template("login.html", error="Väärä tunnus tai salasana")
+            
 
 @app.route("/logout")
 def logout():

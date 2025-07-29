@@ -13,6 +13,7 @@ def execute(sql, params=[]):
     con.commit()
     g.last_insert_id = result.lastrowid
     con.close()
+    return result
 
 def last_insert_id():
     return g.last_insert_id    

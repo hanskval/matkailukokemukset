@@ -12,7 +12,8 @@
 - Kloonaa github lisäämällä terminaaliin --> "git clone https://github.com/hanskval/matkailukokemukset.git"
 - Tämän jälkeen mene ladattuun kansioon --> "cd matkailukokemukset"
 - Asennetaan virtuaali ympäristö missä voit ajaa ohjelmaa --> "python3 -m venv venv"
-- Nyt sinulla on virtuaali ympäristö. aktivoi se --> "venv\Scripts\activate" jonka jälkeen voit asentaa sinne vaadittavan python kirjaston "pip install Flask"
+- Nyt sinulla on virtuaali ympäristö. aktivoi se --> "source venv/bin/activate" jonka jälkeen voit asentaa sinne vaadittavan python kirjaston "pip install Flask"
+- schema.sql avulla voit luoda tarvittavan database.db tiedoston kirjoittamalla terminaaliin --> "sqlite3 database.db < schema.sql"
 - Nyt voit ajaa koodin terminaaliin kirjoittamalla --> "flask run"
 
 
