@@ -16,6 +16,14 @@ def index():
     all_items = items.get_items()
     return render_template("index.html", items=all_items)
 
+@app.route("/find_kokemukset", methods=["GET", "POST"])
+def find_kokemukset():
+    query = request.args.get("query") or ""
+    rating = request.args.getlist("rating")
+    
+    all_items = items.find_kokemuksia(query, rating) if (query or rating) else [] # haku myös mahdollinen pelkästään arvosanalla
+    return render_template("find_kokemukset.html", items=all_items, query=query, selected_ratings=rating)
+
 @app.route("/item/<int:item_id>")
 def show_kokemus(item_id):
     item = items.get_item(item_id)
@@ -23,7 +31,6 @@ def show_kokemus(item_id):
 
 @app.route("/kokemukset")
 def kokemukset():
-
     return render_template("kokemukset.html")
 
 @app.route("/register")

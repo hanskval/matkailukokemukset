@@ -24,7 +24,23 @@ def update_item(item_id, title, description, rating):
              SET title = ?, description = ?, rating = ?
              WHERE id = ?"""
     db.execute(sql, [title, description, rating, item_id])
-    
+
 def remove_item(item_id):
     sql = "DELETE FROM experiences WHERE id = ?"
     db.execute(sql, [item_id])
+
+def find_kokemuksia(query, ratings):
+    sql = "SELECT * FROM experiences WHERE 1=1"
+    params = []
+    
+    if ratings:
+        placeholders = ",".join(["?"] * len(ratings))
+        sql += f" AND rating IN ({placeholders})"
+        params.extend(ratings)
+
+    if query:
+        sql += " AND (LOWER(title) LIKE LOWER(?) OR LOWER(description) LIKE LOWER(?))"
+        params.extend([f"%{query}%", f"%{query}%"])
+
+
+    return db.query(sql, params)

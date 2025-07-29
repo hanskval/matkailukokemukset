@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Etsi matkailukokemuksia</title>
+</head>
+
+<body>
+  <h1>Etsi matkailukokemuksia</h1>
+  <form action="/find_kokemukset" method="get">
+    <input type="text" name="query" placeholder="Hae kokemuksia..." value="{{ query }}">
+    <p>Arvosana:</p>
+  <label><input type="checkbox" name="rating" value="1" {% if '1' in selected_ratings %}checked{% endif %}> 1</label>
+  <label><input type="checkbox" name="rating" value="2" {% if '2' in selected_ratings %}checked{% endif %}> 2</label>
+  <label><input type="checkbox" name="rating" value="3" {% if '3' in selected_ratings %}checked{% endif %}> 3</label>
+  <label><input type="checkbox" name="rating" value="4" {% if '4' in selected_ratings %}checked{% endif %}> 4</label>
+  <label><input type="checkbox" name="rating" value="5" {% if '5' in selected_ratings %}checked{% endif %}> 5</label>
+
+  </p>
+    <button type="submit">Hae</button> 
+</p>
+  <p>
+    <a href="/">Takaisin</a>
+  </p>
+  </form>
+  <h1>Hakutulokset</h1>
+  {% if query %}
+    <p>Hakutulokset hakusanalla: <strong>{{ query }}</strong></p>
+  {% endif %}
+  <ul>
+    {% if not items %}
+      <li>Ei tuloksia</li>
+    {% endif %}
+
+    {% for item in items %}
+      <li><a href="/item/{{ item.id }}">{{ item.title }}</a></li>
+    {% endfor %}
+  </ul>
+</body>
+
+</html>
