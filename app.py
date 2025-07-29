@@ -23,7 +23,7 @@ def show_kokemus(item_id):
 
 @app.route("/kokemukset")
 def kokemukset():
-    
+
     return render_template("kokemukset.html")
 
 @app.route("/register")
@@ -57,10 +57,33 @@ def create_kokemus():
     username = session["username"]
     sql = "SELECT id FROM users WHERE username = ?"
     user_id = db.query(sql, [username])[0][0]
-    
+
     items.add_item(title, description, rating, user_id)
-    
+
     return redirect("/")
+
+@app.route("/update_experience", methods=["POST"])
+def update_experience():
+    title = request.form["title"]
+    description = request.form["description"]
+    rating = request.form["rating"]
+    item_id = request.form["item_id"]
+
+    items.update_item(item_id, title, description, rating)
+
+    return redirect("/item/" + str(item_id))
+
+@app.route("/remove_experience/<int:item_id>", methods=["GET", "POST"])
+def remove_experience(item_id):
+    if request.method == "GET":
+        item = items.get_item(item_id)
+        return render_template("remove_experience.html", item=item)
+    if request.method == "POST":
+        if "remove" in request.form:
+            items.remove_item(item_id)
+            return redirect("/")
+        else:
+            return redirect("/item/" + str(item_id))
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -85,3 +108,7 @@ def logout():
     del session["username"]
     return redirect("/")
 
+@app.route("/edit_experience/<int:item_id>")
+def edit_kokemus(item_id):
+    item = items.get_item(item_id)
+    return render_template("edit_experience.html", item=item)

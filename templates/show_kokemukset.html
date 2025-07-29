@@ -1,12 +1,19 @@
-    </p>
 <!DOCTYPE html>
 <html>
 
 <head>
   <title>{{ item.title}}</title>
 </head>
+
 <body>
   <h1>{{ item.title }}</h1>
+  {% if session.username == item.username %}
+    <p>
+        <a href="/edit_experience/{{ item.id }}">Muokkaa</a>
+        <a href="/remove_experience/{{ item.id }}">Poista</a>
+    </p>
+    {% endif %}
+
     <p><strong>Ilmoittaja:</strong> {{ item.username }}</p>
   <p>{{ item.description }}</p>
   <p><strong>Arvosana:</strong> {{ item.rating }}</p>
