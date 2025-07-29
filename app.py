@@ -6,16 +6,24 @@ from werkzeug.security import check_password_hash
 
 import db
 import config
+import items
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    all_items = items.get_items()
+    return render_template("index.html", items=all_items)
+
+@app.route("/item/<int:item_id>")
+def show_kokemus(item_id):
+    item = items.get_item(item_id)
+    return render_template("show_kokemukset.html", item=item)
 
 @app.route("/kokemukset")
 def kokemukset():
+    
     return render_template("kokemukset.html")
 
 @app.route("/register")
@@ -24,6 +32,7 @@ def register():
 
 @app.route("/create", methods=["POST"])
 def create():
+
     username = request.form["username"]
     password1 = request.form["password1"]
     password2 = request.form["password2"]
@@ -44,20 +53,13 @@ def create_kokemus():
     title = request.form["title"]
     description = request.form["description"]
     rating = request.form["rating"]
-    
-    if "username" not in session:
-        return '''
-        <p><strong>Et ole kirjautunut sisään.</strong></p>
-        <p><a href="/login">Kirjaudu sisään</a></p>
-        ''', 401
 
     username = session["username"]
     sql = "SELECT id FROM users WHERE username = ?"
     user_id = db.query(sql, [username])[0][0]
-
-    sql = "INSERT INTO experiences (title, description, user_id, rating) VALUES (?, ?, ?, ?)"
-    db.execute(sql, [title, description, user_id, rating])
-
+    
+    items.add_item(title, description, rating, user_id)
+    
     return redirect("/")
 
 @app.route("/login", methods=["GET", "POST"])

@@ -5,7 +5,6 @@
   <title>Matkailukokemuksia</title>
   <style>
     .header {
-      display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 10px;
@@ -20,6 +19,12 @@
 <body>
   <div class="header">
     <h1>Tervetuloa matkailukokemusten pariin!</h1>
+    
+    {% if session.username %}
+    <div class="nav-links">
+        <a href="/kokemukset">Uusi ilmoitus</a>
+    </div>
+    {% endif %}
 
     {% if session.username %}
     <div class="user-info">
@@ -32,13 +37,21 @@
 
   <p>
     {% if not session.username %}
+    <div class="user-info">
     <a href="/login">Kirjaudu sisään</a>
     <a href="/register">Rekisteröidy</a>
+    </div>
     {% endif %}
   </p>
   <p>
-    <a href="/kokemukset">Kokemukset</a>
   </p>
+
+  <h2>Matkailukokemukset</h2>
+  <ul>
+  {% for item in items %}
+    <li><a href="/item/{{ item.id }}">{{ item.title }}</a></li>
+  {% endfor %}
+  </ul>
 </body>
 
 </html>
