@@ -9,11 +9,15 @@
 - Sovelluksessa on pääasiallisen matkailukokemuksen lisäksi toissijainen tietokohde (esim kommentit), joka täydentää pääasiallista tietokohdetta. Käyttäjä pystyy lisäämään toissijaisia (kommentteja) matkailukokemuksiin omiin ja muiden käyttäjien matkailukokemuksiin liittyen.
 
 # Ohjelman testaaminen
-- Kloonaa github lisäämällä terminaaliin --> "git clone https://github.com/hanskval/matkailukokemukset.git"
-- Tämän jälkeen mene ladattuun kansioon --> "cd matkailukokemukset"
-- Asennetaan virtuaali ympäristö missä voit ajaa ohjelmaa --> "python3 -m venv venv"
-- Nyt sinulla on virtuaali ympäristö. aktivoi se --> "source venv/bin/activate" jonka jälkeen voit asentaa sinne vaadittavan python kirjaston "pip install Flask"
-- schema.sql avulla voit luoda tarvittavan database.db tiedoston kirjoittamalla terminaaliin --> "sqlite3 database.db < schema.sql"
-- Nyt voit ajaa koodin terminaaliin kirjoittamalla --> "flask run"
+Tämä ohjee koskee macOS/Linux käyttöjärjestelmiä.
+- Kloonaa GitHub-repositorio --> "git clone https://github.com/hanskval/matkailukokemukset.git"
+- Siirry ladattuun kansioon --> "cd matkailukokemukset"
+- Luo Python virtuaaliympäristö --> "python3 -m venv venv"
+- Aktvioi virtuaali ympäristö --> "source venv/bin/activate"
+- Asenna tarvittavat Python kirjastot "pip install Flask"
+- Luo tarvittava tietokanta schema.sql tiedoston avulla --> "sqlite3 database.db < schema.sql"
+- Käynnistä flask --> "flask run"
+- Jolloin nettisivut aukeavat terminaalin antamaan osoitteeseen.
+
 
 
