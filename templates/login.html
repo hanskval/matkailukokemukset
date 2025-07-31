@@ -12,19 +12,24 @@
   </p>
   <p>
     <a href="/logout">Kirjaudu ulos</a>
+    <a href="/">Etusivulle</a>
   </p>
   {% else %}
   <form action="/login" method="post">
     <p>
       Tunnus: <br />
-      <input type="text" name="username" />
+      <input type="text" name="username" required />
     </p>
     <p>
       Salasana: <br />
-      <input type="password" name="password" />
+      <input type="password" name="password" required />
+      {% if error %}
+      <div class="error-message">{{ error }}</div>
+      {% endif %}
     </p>
     <input type="submit" value="Kirjaudu" />
-    <a href="/">Takaisin</a>
+    
+    <a href="/">Etusivulle</a>
   </form>
   {% endif %}
 </body>

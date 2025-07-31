@@ -1,7 +1,15 @@
     </p>
 <!DOCTYPE html>
 <html>
-
+  {% if not session.username %}
+<p>
+  <div class="user-info">
+    <p>Sinun täytyy kirjautua sisään luodaksesi uuden kokemuksen.</p>
+    <a href="/login">Kirjaudu sisään</a>
+  </div>
+</p>
+{% endif %}
+{% if session.username %}
 <head>
   <title>Uusi kokemus</title>
 </head>
@@ -11,20 +19,25 @@
   <form action="/create_kokemus" method="post">
     <p>
       Otsikko: <br />
-      <input type="text" name="title" />
+      <input type="text" name="title" required  />
     </p>
     <p>
       Kuvaus: <br />
-      <textarea name="description" rows="8" cols="60"></textarea>
+      <textarea name="description" rows="8" cols="60" required></textarea>
     </p>
     <p>
       Arvosana (1-5): <br />
-      <input type="radio" name="rating" value="1" /> 1
-      <input type="radio" name="rating" value="2" /> 2
-      <input type="radio" name="rating" value="3" /> 3
-      <input type="radio" name="rating" value="4" /> 4
-      <input type="radio" name="rating" value="5" /> 5
+      <input type="radio" name="rating" value="1" required /> 1
+      <input type="radio" name="rating" value="2" required /> 2
+      <input type="radio" name="rating" value="3" required /> 3
+      <input type="radio" name="rating" value="4" required /> 4
+      <input type="radio" name="rating" value="5" required /> 5
     </p>
+    {% if error %}
+    <div class="error-message">{{ error }}</div>
+    {% endif %}
     <input type="submit" value="Lähetä" />
-  
+    <a href="/">Peruuta</a>
+  {% endif %}
 </html>
+

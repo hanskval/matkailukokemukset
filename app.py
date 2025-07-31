@@ -1,5 +1,6 @@
 import sqlite3
 from flask import Flask
+from flask import abort
 from flask import redirect, render_template, request, session
 from werkzeug.security import generate_password_hash
 from werkzeug.security import check_password_hash
@@ -27,6 +28,8 @@ def find_kokemukset():
 @app.route("/item/<int:item_id>")
 def show_kokemus(item_id):
     item = items.get_item(item_id)
+    if not item:
+        abort(404)
     return render_template("show_kokemukset.html", item=item)
 
 @app.route("/kokemukset")
@@ -39,19 +42,18 @@ def register():
 
 @app.route("/create", methods=["POST"])
 def create():
-
     username = request.form["username"]
     password1 = request.form["password1"]
     password2 = request.form["password2"]
     if password1 != password2:
-        return "VIRHE: salasanat eivät ole samat"
+        return "Antamat salasanat eivät ole samat"
     password_hash = generate_password_hash(password1)
 
     try:
         sql = "INSERT INTO users (username, password_hash) VALUES (?, ?)"
         db.execute(sql, [username, password_hash])
     except sqlite3.IntegrityError:
-        return "VIRHE: tunnus on jo varattu"
+        return "antamasi tunnus on jo varattu"
 
     return redirect("/")
 
@@ -60,6 +62,11 @@ def create_kokemus():
     title = request.form["title"]
     description = request.form["description"]
     rating = request.form["rating"]
+    if not session.get("username"):
+        return redirect("/login")
+
+    if len(title) > 25 or len(description) > 5000:
+        return render_template("kokemukset.html", error="Otsikon tulee olla enintään 25 merkkiä ja kuvauksen enintään 5000 merkkiä pitkä.")
 
     username = session["username"]
     sql = "SELECT id FROM users WHERE username = ?"
@@ -75,6 +82,11 @@ def update_experience():
     description = request.form["description"]
     rating = request.form["rating"]
     item_id = request.form["item_id"]
+    item = items.get_item(item_id)
+    if len(title) > 5 or len(description) > 5000:
+        return render_template("edit_experience.html", item=item, error="Otsikon tulee olla enintään 50 merkkiä ja kuvauksen enintään 5000 merkkiä pitkä.")
+    if item["username"] != session.get("username"):
+        return redirect("/")
 
     items.update_item(item_id, title, description, rating)
 
@@ -82,15 +94,20 @@ def update_experience():
 
 @app.route("/remove_experience/<int:item_id>", methods=["GET", "POST"])
 def remove_experience(item_id):
-    if request.method == "GET":
-        item = items.get_item(item_id)
-        return render_template("remove_experience.html", item=item)
-    if request.method == "POST":
-        if "remove" in request.form:
-            items.remove_item(item_id)
-            return redirect("/")
-        else:
-            return redirect("/item/" + str(item_id))
+    item = items.get_item(item_id)
+    if not item:
+        abort(404)
+    if item["username"] != session.get("username"):
+        return redirect("/")
+    else:
+        if request.method == "GET":
+            return render_template("remove_experience.html", item=item)
+        if request.method == "POST":
+            if "remove" in request.form:
+                items.remove_item(item_id)
+                return redirect("/")
+            else:
+                return redirect("/item/" + str(item_id))
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -117,10 +134,17 @@ def login():
 
 @app.route("/logout")
 def logout():
+    if not session.get("username"):
+        return redirect("/")
     del session["username"]
     return redirect("/")
 
 @app.route("/edit_experience/<int:item_id>")
 def edit_kokemus(item_id):
+   
     item = items.get_item(item_id)
+    if not item:
+        abort(404)
+    if item["username"] != session.get("username"):
+        return redirect("/")
     return render_template("edit_experience.html", item=item)
