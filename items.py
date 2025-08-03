@@ -7,6 +7,16 @@ def get_items():
     sql = "SELECT * FROM experiences"
     return db.query(sql)
 
+def get_items_by_user(username):
+    sql = """SELECT experiences.id,
+                    experiences.title,
+                    experiences.description,
+                    experiences.rating,
+                    users.username
+             FROM experiences, users
+             WHERE experiences.user_id = users.id AND users.username = ?"""
+    return db.query(sql, [username])
+
 def get_item(item_id):
     sql = """SELECT experiences.id,
                     experiences.title,

@@ -17,6 +17,14 @@ def index():
     all_items = items.get_items()
     return render_template("index.html", items=all_items)
 
+@app.route("/profile")
+def profile():
+    username = session.get("username")
+    if not username:
+        return redirect("/login")
+    all_items = items.get_items_by_user(username)
+    return render_template("profile.html", username=username, items=all_items)
+
 @app.route("/find_kokemukset", methods=["GET", "POST"])
 def find_kokemukset():
     query = request.args.get("query") or ""
@@ -83,7 +91,7 @@ def update_experience():
     rating = request.form["rating"]
     item_id = request.form["item_id"]
     item = items.get_item(item_id)
-    if len(title) > 5 or len(description) > 5000:
+    if len(title) > 50 or len(description) > 5000:
         return render_template("edit_experience.html", item=item, error="Otsikon tulee olla enintään 50 merkkiä ja kuvauksen enintään 5000 merkkiä pitkä.")
     if item["username"] != session.get("username"):
         return redirect("/")
