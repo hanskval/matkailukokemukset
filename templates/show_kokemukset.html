@@ -13,11 +13,25 @@
         <a href="/remove_experience/{{ item.id }}">Poista</a>
     </p>
     {% endif %}
-
+  
     <p><strong>Ilmoittaja:</strong> {{ item.username }}</p>
   <p>{{ item.description }}</p>
   <p><strong>Arvosana:</strong> {{ item.rating }}</p>
 <p>
+    <strong>Tykkäykset:</strong> {{ count }}</p>
+  <p>
+  {% if session.username %}
+    {% if liked %}
+        <form method="post">
+            <button type="submit" name="action" value="unlike">Peru tykkäys</button>
+        </form>
+    {% else %}
+        <form method="post">
+            <button type="submit" name="action" value="like">Tykkää</button>
+        </form>
+    {% endif %}
+
+{% endif %}
   <a href="/">Etusivulle</a>
 </p>
 </body>

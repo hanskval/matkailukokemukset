@@ -17,6 +17,24 @@ def get_items_by_user(username):
              WHERE experiences.user_id = users.id AND users.username = ?"""
     return db.query(sql, [username])
 
+def has_liked(user_id, experience_id): # Tarkistaa onko tykätty kokemuksesta
+    sql = "SELECT 1 FROM likes WHERE user_id = ? AND experience_id = ?"
+    result = db.query(sql, [user_id, experience_id])
+    return len(result) > 0
+
+def add_like(user_id, experience_id): # Lisää tykkäyksen kokemukseen
+    sql = "INSERT INTO likes (user_id, experience_id) VALUES (?, ?)"
+    db.execute(sql, [user_id, experience_id])
+
+def remove_like(user_id, experience_id):
+    sql = "DELETE FROM likes WHERE user_id = ? AND experience_id = ?"
+    db.execute(sql, [user_id, experience_id])
+
+def get_likes_count(experience_id):
+    sql = "SELECT COUNT(*) FROM likes WHERE experience_id = ?"
+    result = db.query(sql, [experience_id])
+    return result[0][0] if result else 0
+
 def get_item(item_id):
     sql = """SELECT experiences.id,
                     experiences.title,

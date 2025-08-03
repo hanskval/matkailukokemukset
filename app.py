@@ -33,12 +33,35 @@ def find_kokemukset():
     all_items = items.find_kokemuksia(query, rating) if (query or rating) else [] # haku myös mahdollinen pelkästään arvosanalla
     return render_template("find_kokemukset.html", items=all_items, query=query, selected_ratings=rating)
 
-@app.route("/item/<int:item_id>")
+@app.route("/item/<int:item_id>", methods=["POST","GET"])
 def show_kokemus(item_id):
+    username = session.get("username")
+    if username:
+        sql = "SELECT id FROM users WHERE username = ?"
+        user_id = db.query(sql, [username])[0][0]
+      
+    if request.method == "POST":
+        if not username:
+            return redirect("/login")
+        
+        action = request.form.get("action")
+        if action == "like":
+            if not items.has_liked(user_id, item_id):
+                items.add_like(user_id, item_id)
+        elif action == "unlike":
+            if items.has_liked(user_id, item_id):
+                items.remove_like(user_id, item_id)
+
+        return redirect("/item/" + str(item_id))
+    
     item = items.get_item(item_id)
+    liked = items.has_liked(user_id, item_id) if username else False
+    count = items.get_likes_count(item_id)
     if not item:
         abort(404)
-    return render_template("show_kokemukset.html", item=item)
+    return render_template("show_kokemukset.html", item=item, liked=liked, count=count)
+
+
 
 @app.route("/kokemukset")
 def kokemukset():
