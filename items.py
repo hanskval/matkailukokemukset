@@ -26,7 +26,7 @@ def add_like(user_id, experience_id): # Lisää tykkäyksen kokemukseen
     sql = "INSERT INTO likes (user_id, experience_id) VALUES (?, ?)"
     db.execute(sql, [user_id, experience_id])
 
-def remove_like(user_id, experience_id):
+def remove_like(user_id, experience_id): # Poistaa tykkäyksen kokemuksesta
     sql = "DELETE FROM likes WHERE user_id = ? AND experience_id = ?"
     db.execute(sql, [user_id, experience_id])
 
@@ -55,8 +55,10 @@ def update_item(item_id, title, description, rating):
     db.execute(sql, [title, description, rating, item_id])
 
 def remove_item(item_id):
-    sql = "DELETE FROM experiences WHERE id = ?"
-    db.execute(sql, [item_id])
+    with db.get_connection() as con:  
+        con.execute("DELETE FROM likes WHERE experience_id = ?", [item_id])# poistaa ensin tykkäykset jonka jälkeen voi poistaa kokemuksen
+        con.execute("DELETE FROM experiences WHERE id = ?", [item_id])
+
 
 def find_kokemuksia(query, ratings):
     sql = "SELECT * FROM experiences WHERE 1=1"

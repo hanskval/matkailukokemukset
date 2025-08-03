@@ -53,9 +53,12 @@
   </p>
   <h2>Matkailukokemukset</h2>
     <ul class="experience-list">
-  {% for item in items %}
-    <li><a href="/item/{{ item.id }}">{{ item.title }}</a></li>
-  {% endfor %}
+    {% if not items %}
+      <li>Ei matkailukokemuksia.</li>
+    {% endif %}
+    {% for item in items %}
+      <li><a href="/item/{{ item.id }}">{{ item.title }}</a></li>
+    {% endfor %}
   </ul>
 </body>
 
