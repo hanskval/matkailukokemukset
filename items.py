@@ -84,7 +84,7 @@ def remove_item(item_id):
 
 
 def find_kokemuksia(query, ratings):
-    sql = "SELECT * FROM experiences WHERE 1=1"
+    sql = "SELECT id, title, description, rating FROM experiences WHERE 1=1"
     params = []
     
     if ratings:

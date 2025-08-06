@@ -90,7 +90,7 @@ def create():
         flash("Käyttäjätunnus on jo varattu")
         return redirect("/register")
 
-    return redirect("/")
+    return redirect("/login")
 
 @app.route("/create_kokemus", methods=["POST"])
 def create_kokemus():
