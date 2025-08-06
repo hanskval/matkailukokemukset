@@ -1,7 +1,7 @@
 import sqlite3
 from flask import Flask
 from flask import abort
-from flask import redirect, render_template, request, session
+from flask import redirect, render_template, flash, request, session
 from werkzeug.security import generate_password_hash
 from werkzeug.security import check_password_hash
 
@@ -76,15 +76,19 @@ def create():
     username = request.form["username"]
     password1 = request.form["password1"]
     password2 = request.form["password2"]
+    if username == "" or password1 == "" or password2 == "":
+        flash("Kaikki kentät ovat pakollisia")
+        return redirect("/register")
     if password1 != password2:
-        return "Antamat salasanat eivät ole samat"
-    password_hash = generate_password_hash(password1)
+        flash("Antamat salasanat eivät ole samat")
+        return redirect("/register")
 
-    try:
-        sql = "INSERT INTO users (username, password_hash) VALUES (?, ?)"
-        db.execute(sql, [username, password_hash])
-    except sqlite3.IntegrityError:
-        return "antamasi tunnus on jo varattu"
+    password_hash = generate_password_hash(password1)
+    add = items.insert_user(username, password_hash)
+
+    if not add:
+        flash("Käyttäjätunnus on jo varattu")
+        return redirect("/register")
 
     return redirect("/")
 
@@ -100,12 +104,13 @@ def create_kokemus():
         return render_template("kokemukset.html", error="Otsikon tulee olla enintään 25 merkkiä ja kuvauksen enintään 5000 merkkiä pitkä.")
 
     username = session["username"]
-    sql = "SELECT id FROM users WHERE username = ?"
-    user_id = db.query(sql, [username])[0][0]
+    user_id = items.get_user_id(username)
 
-    items.add_item(title, description, rating, user_id)
-
-    return redirect("/")
+    if user_id:
+        items.add_item(title, description, rating, user_id)
+        return redirect("/")
+    else:
+        return redirect("/login")
 
 @app.route("/update_experience", methods=["POST"])
 def update_experience():
@@ -149,14 +154,8 @@ def login():
         username = request.form["username"]
         password = request.form["password"]
 
-        sql = "SELECT password_hash FROM users WHERE username = ?"
-        results = db.query(sql, [username])
-        if results:
-            password_hash = results[0][0]
-        else:
-            return render_template("login.html", error="Väärä tunnus tai salasana")
-
-        if check_password_hash(password_hash, password):
+        password_hash = items.get_user_password(username)
+        if password_hash and check_password_hash(password_hash, password):
             session["username"] = username
             return redirect("/")
         else:

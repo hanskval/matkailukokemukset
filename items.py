@@ -1,4 +1,5 @@
 import db
+import sqlite3
 def add_item(title, description, rating, user_id):
     sql = """INSERT INTO experiences (title, description, user_id, rating) VALUES (?, ?, ?, ?)"""
     db.execute(sql, [title, description, user_id, rating])
@@ -7,6 +8,28 @@ def get_items():
     sql = "SELECT * FROM experiences"
     return db.query(sql)
 
+def get_user_id(username):
+    sql = "SELECT id FROM users WHERE username = ?"
+    result = db.query(sql, [username])
+    if result:
+        return result[0][0]
+    return None
+
+def insert_user(username, password_hash):
+    try:
+        sql = "INSERT INTO users (username, password_hash) VALUES (?, ?)"
+        db.execute(sql, [username, password_hash])
+        return True
+    except sqlite3.IntegrityError:
+        return False
+
+    db.execute(sql, [username, password_hash])
+def get_user_password(username):
+    sql = "SELECT password_hash FROM users WHERE username = ?"
+    results = db.query(sql, [username])
+    if results:
+        return results[0][0]
+    return None
 def get_items_by_user(username):
     sql = """SELECT experiences.id,
                     experiences.title,

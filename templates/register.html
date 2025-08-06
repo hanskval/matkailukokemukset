@@ -9,16 +9,26 @@
   <form action="/create" method="post">
     <p>
       Tunnus: <br />
-      <input type="text" name="username" required />
+      <input type="text" name="username" required  />
     </p>
     <p>
       Salasana: <br />
-      <input type="password" name="password1" required />
+      <input type="password" name="password1" required  />
     </p>
     <p>
       Salasana uudestaan: <br />
-      <input type="password" name="password2" required />
+      <input type="password" name="password2" required  />
     </p>
+    {% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class="flashes">
+      {% for message in messages %}
+        <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
     <input type="submit" value="Luo tunnus" />
     <a href="/">Etusivulle</a>
   </form>
