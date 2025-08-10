@@ -35,10 +35,11 @@ def find_kokemukset():
 
 @app.route("/item/<int:item_id>", methods=["POST","GET"])
 def show_kokemus(item_id):
+    comments = items.get_comments(item_id)
+    
     username = session.get("username")
     if username:
-        sql = "SELECT id FROM users WHERE username = ?"
-        user_id = db.query(sql, [username])[0][0]
+        user_id = items.get_user_id(username)
       
     if request.method == "POST":
         if not username:
@@ -51,6 +52,10 @@ def show_kokemus(item_id):
         elif action == "unlike":
             if items.has_liked(user_id, item_id):
                 items.remove_like(user_id, item_id)
+        elif action == "comment":
+            comment = request.form.get("comment")
+            if comment:
+                items.comment_experience(user_id, item_id, comment)
 
         return redirect("/item/" + str(item_id))
     
@@ -59,7 +64,7 @@ def show_kokemus(item_id):
     count = items.get_likes_count(item_id)
     if not item:
         abort(404)
-    return render_template("show_kokemukset.html", item=item, liked=liked, count=count)
+    return render_template("show_kokemukset.html", item=item, liked=liked, count=count, comments=comments)
 
 
 

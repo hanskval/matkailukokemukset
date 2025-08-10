@@ -18,3 +18,13 @@ CREATE TABLE likes (
     experience_id INTEGER REFERENCES experiences(id),
     PRIMARY KEY (user_id, experience_id)
 );
+
+CREATE TABLE comments (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    item_id INTEGER NOT NULL,
+    user_id INTEGER NOT NULL,
+    comment TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (item_id) REFERENCES experiences(id),
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);

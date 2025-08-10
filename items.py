@@ -23,13 +23,23 @@ def insert_user(username, password_hash):
     except sqlite3.IntegrityError:
         return False
 
-    db.execute(sql, [username, password_hash])
 def get_user_password(username):
     sql = "SELECT password_hash FROM users WHERE username = ?"
     results = db.query(sql, [username])
     if results:
         return results[0][0]
     return None
+
+def comment_experience(user_id, item_id, comment):
+    sql = "INSERT INTO comments (user_id, item_id, comment) VALUES (?, ?, ?)"
+    db.execute(sql, [user_id, item_id, comment])
+    
+def get_comments(item_id):
+    sql = """SELECT comments.id, comments.comment, comments.created_at, comments.user_id, users.username
+             FROM comments, users
+             WHERE comments.user_id = users.id AND comments.item_id = ?"""
+    return db.query(sql, [item_id,])
+
 def get_items_by_user(username):
     sql = """SELECT experiences.id,
                     experiences.title,
@@ -78,7 +88,8 @@ def update_item(item_id, title, description, rating):
     db.execute(sql, [title, description, rating, item_id])
 
 def remove_item(item_id):
-    with db.get_connection() as con:  
+    with db.get_connection() as con:
+        con.execute("DELETE FROM comments WHERE item_id = ?", [item_id])
         con.execute("DELETE FROM likes WHERE experience_id = ?", [item_id])# poistaa ensin tykkäykset jonka jälkeen voi poistaa kokemuksen
         con.execute("DELETE FROM experiences WHERE id = ?", [item_id])
 

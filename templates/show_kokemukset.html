@@ -15,12 +15,11 @@
     {% endif %}
   
     <p><strong>Ilmoittaja:</strong> {{ item.username }}</p>
-  <p>{{ item.description }}</p>
+    <p style="white-space: pre-wrap; overflow-wrap: break-word;"> {{ item.description }} </p>
   <p><strong>Arvosana:</strong> {{ item.rating }}</p>
 <p>
     <strong>Tykkäykset:</strong> {{ count }}</p>
-  <p>
-  {% if session.username %}
+    {% if session.username %}
     {% if liked %}
         <form method="post">
             <button type="submit" name="action" value="unlike">Peru tykkäys</button>
@@ -31,7 +30,32 @@
         </form>
     {% endif %}
 
+    
+
 {% endif %}
+  <p>
+    <h3>Jätä kommentti</h3>
+    <form method="post">
+        <textarea name="comment" rows="4" cols="50" placeholder="Kirjoita kommenttisi tähän..." required></textarea>
+        <br>
+        <button type="submit" name="action" value="comment">Lähetä kommentti</button>
+    </form>
+
+  <h3>Kommentit</h3>
+  {% if not comments %}
+    <p>Ei kommentteja</p>
+  {% endif %}
+  <ul>
+    {% for c in comments %}
+    <li>
+        <strong>Käyttäjä: {{ c.username }}</strong> <span style="white-space: pre-wrap; overflow-wrap: break-word;">{{ c.comment }}</span>
+        <small style="color: gray;">{{ c.created_at }}</small>
+    </li>
+    {% endfor %}
+
+    </p>
+  </ul>
+  </p>
   <a href="/">Etusivulle</a>
 </p>
 </body>
