@@ -9,6 +9,7 @@
   <p>Oletko varma, että haluat poistaa ilmoituksen "{{ item.title }}"?</p>
   <form action="/remove_experience/{{ item.id }}" method="post">
     <input type="submit" name="remove"value="Kyllä, poista ilmoitus" />
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
     <input type="submit" name="back" value="Peruuta" />
 
   </form>

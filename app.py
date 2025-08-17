@@ -1,6 +1,7 @@
 import sqlite3
 from flask import Flask
 from flask import abort
+import secrets
 from flask import redirect, render_template, flash, request, session
 from werkzeug.security import generate_password_hash
 from werkzeug.security import check_password_hash
@@ -42,6 +43,7 @@ def show_kokemus(item_id):
         user_id = items.get_user_id(username)
       
     if request.method == "POST":
+        check_csrf()
         if not username:
             return redirect("/login")
         
@@ -100,6 +102,7 @@ def create():
 @app.route("/create_kokemus", methods=["POST"])
 def create_kokemus():
     title = request.form["title"]
+    check_csrf()
     description = request.form["description"]
     rating = request.form["rating"]
     if not session.get("username"):
@@ -121,6 +124,7 @@ def create_kokemus():
 @app.route("/update_experience", methods=["POST"])
 def update_experience():
     title = request.form["title"]
+    check_csrf()
     description = request.form["description"]
     rating = request.form["rating"]
     item_id = request.form["item_id"]
@@ -138,6 +142,7 @@ def update_experience():
 @app.route("/remove_experience/<int:item_id>", methods=["GET", "POST"])
 def remove_experience(item_id):
     item = items.get_item(item_id)
+
     if not item:
         abort(404)
     if item["username"] != session.get("username"):
@@ -146,6 +151,7 @@ def remove_experience(item_id):
         if request.method == "GET":
             return render_template("remove_experience.html", item=item)
         if request.method == "POST":
+            check_csrf()
             if "remove" in request.form:
                 items.remove_item(item_id)
                 return redirect("/")
@@ -164,10 +170,14 @@ def login():
         password_hash = items.get_user_password(username)
         if password_hash and check_password_hash(password_hash, password):
             session["username"] = username
+            session["csrf_token"] = secrets.token_hex(16)
             return redirect("/")
         else:
             return render_template("login.html", error="Väärä tunnus tai salasana")
-            
+
+def check_csrf():
+    if request.form["csrf_token"] != session.get("csrf_token"):
+        abort(403)
 
 @app.route("/logout")
 def logout():
@@ -178,7 +188,6 @@ def logout():
 
 @app.route("/edit_experience/<int:item_id>")
 def edit_kokemus(item_id):
-   
     item = items.get_item(item_id)
     if not item:
         abort(404)

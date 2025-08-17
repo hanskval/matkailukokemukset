@@ -29,10 +29,12 @@
     {% if session.username %}
     {% if liked %}
         <form method="post">
+            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
             <button type="submit" name="action" value="unlike">Peru tykkäys</button>
         </form>
     {% else %}
         <form method="post">
+            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
             <button type="submit" name="action" value="like">Tykkää</button>
         </form>
     {% endif %}
@@ -45,6 +47,8 @@
     <form method="post">
         <textarea name="comment" rows="4" cols="50" placeholder="Kirjoita kommenttisi tähän..." required></textarea>
         <br>
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+
         <button type="submit" name="action" value="comment">Lähetä kommentti</button>
     </form>
     <a href="/">Etusivulle</a>
