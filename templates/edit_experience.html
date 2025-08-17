@@ -27,6 +27,21 @@
       <input type="radio" name="rating" value="4" {% if item.rating == 4 %}checked{% endif %} required /> 4
       <input type="radio" name="rating" value="5" {% if item.rating == 5 %}checked{% endif %} required /> 5
     </p>
+
+  Osasto: <br />
+    <select name="category" required>
+      <option value="luonto">Luonto</option>
+      <option value="kaupunki">Kaupunki</option>
+      <option value="kulttuuri">Kulttuuri</option>
+      <option value="seikkailu">Seikkailu</option>
+      <option value="rentoutuminen">Rentoutuminen</option>
+      <option value="ranta">Ranta</option>
+      <option value="historia">Historia</option>
+      <option value="muu">Muu</option>
+    </select>
+  
+
+    <p>
     <input type="hidden" name="item_id" value="{{ item.id }}" />
     <input type="submit" value="Päivitä ilmoitusta" />
     <a href="/item/{{ item.id }}">Peruuta</a>

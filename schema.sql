@@ -28,3 +28,10 @@ CREATE TABLE comments (
     FOREIGN KEY (item_id) REFERENCES experiences(id),
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
+
+CREATE TABLE categories (
+    id INTEGER PRIMARY KEY,
+    item_id INTEGER REFERENCES experiences(id),
+    title TEXT,
+    value TEXT
+);

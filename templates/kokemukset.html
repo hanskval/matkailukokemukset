@@ -36,6 +36,18 @@
     {% if error %}
     <div class="error-message">{{ error }}</div>
     {% endif %}
+    Osasto: <br />
+    <select name="category" required>
+      <option value="luonto">Luonto</option>
+      <option value="kaupunki">Kaupunki</option>
+      <option value="kulttuuri">Kulttuuri</option>
+      <option value="seikkailu">Seikkailu</option>
+      <option value="rentoutuminen">Rentoutuminen</option>
+      <option value="ranta">Ranta</option>
+      <option value="historia">Historia</option>
+      <option value="muu">Muu</option>
+    </select>
+    <p>
     <input type="submit" value="Lähetä" />
     <a href="/">Peruuta</a>
   {% endif %}

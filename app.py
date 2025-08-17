@@ -58,13 +58,13 @@ def show_kokemus(item_id):
                 items.comment_experience(user_id, item_id, comment)
 
         return redirect("/item/" + str(item_id))
-    
+    categories = items.get_categories(item_id)
     item = items.get_item(item_id)
     liked = items.has_liked(user_id, item_id) if username else False
     count = items.get_likes_count(item_id)
     if not item:
         abort(404)
-    return render_template("show_kokemukset.html", item=item, liked=liked, count=count, comments=comments)
+    return render_template("show_kokemukset.html", item=item, liked=liked, count=count, comments=comments, categories=categories)
 
 
 
@@ -110,9 +110,10 @@ def create_kokemus():
 
     username = session["username"]
     user_id = items.get_user_id(username)
-
+    category = request.form["category"]
+    
     if user_id:
-        items.add_item(title, description, rating, user_id)
+        items.add_item(title, description, rating, user_id, category)
         return redirect("/")
     else:
         return redirect("/login")
@@ -124,12 +125,13 @@ def update_experience():
     rating = request.form["rating"]
     item_id = request.form["item_id"]
     item = items.get_item(item_id)
+    category = request.form["category"]
     if len(title) > 50 or len(description) > 5000:
         return render_template("edit_experience.html", item=item, error="Otsikon tulee olla enintään 50 merkkiä ja kuvauksen enintään 5000 merkkiä pitkä.")
     if item["username"] != session.get("username"):
         return redirect("/")
 
-    items.update_item(item_id, title, description, rating)
+    items.update_item(item_id, title, description, rating, category)
 
     return redirect("/item/" + str(item_id))
 

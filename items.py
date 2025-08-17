@@ -1,8 +1,18 @@
 import db
 import sqlite3
-def add_item(title, description, rating, user_id):
+def add_item(title, description, rating, user_id, category):
     sql = """INSERT INTO experiences (title, description, user_id, rating) VALUES (?, ?, ?, ?)"""
     db.execute(sql, [title, description, user_id, rating])
+    item_id = db.last_insert_id()
+    if category:
+        sql = "INSERT INTO categories (item_id, title) VALUES (?, ?)"
+        db.execute(sql, [item_id, category])
+        
+def get_categories(item_id):
+    sql = "SELECT title FROM categories WHERE item_id = ? LIMIT 1"
+    results = db.query(sql, [item_id])
+    return results[0][0] if results else None
+
 
 def get_items():
     sql = "SELECT * FROM experiences"
@@ -81,14 +91,20 @@ def get_item(item_id):
     results = db.query(sql, [item_id])
     return results[0] if results else None
 
-def update_item(item_id, title, description, rating):
+def update_item(item_id, title, description, rating, category):
     sql = """UPDATE experiences
              SET title = ?, description = ?, rating = ?
              WHERE id = ?"""
     db.execute(sql, [title, description, rating, item_id])
+    if category:
+        sql = """UPDATE categories
+                 SET title = ?
+                 WHERE item_id = ?"""
+    db.execute(sql, [category, item_id])
 
 def remove_item(item_id):
     with db.get_connection() as con:
+        con.execute("DELETE FROM categories WHERE item_id = ?", [item_id])
         con.execute("DELETE FROM comments WHERE item_id = ?", [item_id])
         con.execute("DELETE FROM likes WHERE experience_id = ?", [item_id])# poistaa ensin tykkäykset jonka jälkeen voi poistaa kokemuksen
         con.execute("DELETE FROM experiences WHERE id = ?", [item_id])

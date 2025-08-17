@@ -18,6 +18,13 @@
     <p style="white-space: pre-wrap; overflow-wrap: break-word;"> {{ item.description }} </p>
   <p><strong>Arvosana:</strong> {{ item.rating }}</p>
 <p>
+  Kategoria:
+  {% if categories %}
+    <span style="white-space: pre-wrap; overflow-wrap: break-word;">{{ categories }}</span>
+  {% else %}
+    Ei määritelty
+  {% endif %}
+</p>
     <strong>Tykkäykset:</strong> {{ count }}</p>
     {% if session.username %}
     {% if liked %}
@@ -40,6 +47,7 @@
         <br>
         <button type="submit" name="action" value="comment">Lähetä kommentti</button>
     </form>
+    <a href="/">Etusivulle</a>
 
   <h3>Kommentit</h3>
   {% if not comments %}
@@ -56,7 +64,6 @@
     </p>
   </ul>
   </p>
-  <a href="/">Etusivulle</a>
 </p>
 </body>
 </html>
