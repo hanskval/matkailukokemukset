@@ -32,6 +32,19 @@ def insert_user(username, password_hash):
         return True
     except sqlite3.IntegrityError:
         return False
+    
+
+def get_total_likes(username: str) -> int:
+    sql = """
+        SELECT COUNT(*) AS total_likes
+        FROM likes
+        JOIN experiences ON likes.experience_id = experiences.id
+        JOIN users ON experiences.user_id = users.id
+        WHERE users.username = ?
+    """
+    result = db.query(sql, [username])
+    return result[0]["total_likes"] if result else 0
+
 
 def get_user_password(username):
     sql = "SELECT password_hash FROM users WHERE username = ?"

@@ -23,8 +23,16 @@ def profile():
     username = session.get("username")
     if not username:
         return redirect("/login")
+    
     all_items = items.get_items_by_user(username)
-    return render_template("profile.html", username=username, items=all_items)
+    post_count = len(all_items)
+    likes_count = items.get_total_likes(username)
+    return render_template("profile.html",
+                           username=username,
+                           items=all_items,
+                           post_count=post_count,
+                           likes_count=likes_count)
+
 
 @app.route("/find_kokemukset", methods=["GET", "POST"])
 def find_kokemukset():

@@ -4,45 +4,43 @@
   <title>Profiili</title>
   <style>
     .user-info {
-    position: absolute;
-    top: 10px;
-    right: 20px;
-    text-align: right;
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      text-align: right;
     }
     .experience-list {
-    position: absolute;
-    top: 100px;
-    left: 10px;
-    text-align: left;
+      position: absolute;
+      top: 150px;
+      left: 10px;
+      text-align: left;
     }
   </style>
 </head>
 
 <body>
-    <h1>Profiili</h1>
-    
+  <h1>Profiili</h1>
 
-    {% if session.username %}
-    <div class="user-info">
-      <p>Olet kirjautunut nimellä <strong>{{ session.username }}</strong></p>
-      <a href="/logout">Kirjaudu ulos</a>
-      <a href="/">Etusivu</a>
-      
-    </div>
-    {% endif %}
+  {% if username %}
+  <div class="user-info">
+    <p>Olet kirjautunut nimellä <strong>{{ username }}</strong></p>
+    <p>Julkaisuja: <strong>{{ post_count }}</strong></p>
+    <p>Tykkäyksiä yhteensä: <strong>{{ likes_count }}</strong></p>
+    <a href="/logout">Kirjaudu ulos</a>
+    <a href="/">Etusivu</a>
   </div>
-  
-
+  {% endif %}
 
   <h2>Matkailukokemukset</h2>
-    <ul class="experience-list">
+  <ul class="experience-list">
     {% if not items %}
       <li>Sinulla ei ole vielä matkailukokemuksia.</li>
     {% endif %}
-  {% for item in items %}
-    <li><a href="/item/{{ item.id }}">{{ item.title }}</a></li>
-  {% endfor %}
+    {% for item in items %}
+      <li>
+        <a href="/item/{{ item.id }}">{{ item.title }}</a>
+      </li>
+    {% endfor %}
   </ul>
 </body>
-
 </html>
