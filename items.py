@@ -73,16 +73,16 @@ def get_items_by_user(username):
              WHERE experiences.user_id = users.id AND users.username = ?"""
     return db.query(sql, [username])
 
-def has_liked(user_id, experience_id): # Tarkistaa onko tykätty kokemuksesta
+def has_liked(user_id, experience_id): # checks if user has liked the experience
     sql = "SELECT 1 FROM likes WHERE user_id = ? AND experience_id = ?"
     result = db.query(sql, [user_id, experience_id])
     return len(result) > 0
 
-def add_like(user_id, experience_id): # Lisää tykkäyksen kokemukseen
+def add_like(user_id, experience_id): # adds like to experience
     sql = "INSERT INTO likes (user_id, experience_id) VALUES (?, ?)"
     db.execute(sql, [user_id, experience_id])
 
-def remove_like(user_id, experience_id): # Poistaa tykkäyksen kokemuksesta
+def remove_like(user_id, experience_id): # Deletes like from experience
     sql = "DELETE FROM likes WHERE user_id = ? AND experience_id = ?"
     db.execute(sql, [user_id, experience_id])
 
@@ -119,11 +119,11 @@ def remove_item(item_id):
     with db.get_connection() as con:
         con.execute("DELETE FROM categories WHERE item_id = ?", [item_id])
         con.execute("DELETE FROM comments WHERE item_id = ?", [item_id])
-        con.execute("DELETE FROM likes WHERE experience_id = ?", [item_id])# poistaa ensin tykkäykset jonka jälkeen voi poistaa kokemuksen
+        con.execute("DELETE FROM likes WHERE experience_id = ?", [item_id])
         con.execute("DELETE FROM experiences WHERE id = ?", [item_id])
 
 
-def find_kokemuksia(query, ratings):
+def find_experiences(query, ratings):
     sql = "SELECT id, title, description, rating FROM experiences WHERE 1=1"
     params = []
     

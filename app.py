@@ -34,13 +34,13 @@ def profile():
                            likes_count=likes_count)
 
 
-@app.route("/find_kokemukset", methods=["GET", "POST"])
-def find_kokemukset():
+@app.route("/find_experiences", methods=["GET", "POST"])
+def find_experiences():
     query = request.args.get("query") or ""
     rating = request.args.getlist("rating")
     
-    all_items = items.find_kokemuksia(query, rating) if (query or rating) else [] # haku myös mahdollinen pelkästään arvosanalla
-    return render_template("find_kokemukset.html", items=all_items, query=query, selected_ratings=rating)
+    all_items = items.find_experiences(query, rating) if (query or rating) else [] # haku myös mahdollinen pelkästään arvosanalla
+    return render_template("find_experiences.html", items=all_items, query=query, selected_ratings=rating)
 
 @app.route("/item/<int:item_id>", methods=["POST","GET"])
 def show_kokemus(item_id):
@@ -74,13 +74,13 @@ def show_kokemus(item_id):
     count = items.get_likes_count(item_id)
     if not item:
         abort(404)
-    return render_template("show_kokemukset.html", item=item, liked=liked, count=count, comments=comments, categories=categories)
+    return render_template("show_experiences.html", item=item, liked=liked, count=count, comments=comments, categories=categories)
 
 
 
-@app.route("/kokemukset")
-def kokemukset():
-    return render_template("kokemukset.html")
+@app.route("/experiences")
+def experiences():
+    return render_template("experiences.html")
 
 @app.route("/register")
 def register():
@@ -107,8 +107,8 @@ def create():
 
     return redirect("/login")
 
-@app.route("/create_kokemus", methods=["POST"])
-def create_kokemus():
+@app.route("/create_experience", methods=["POST"])
+def create_experience():
     title = request.form["title"]
     check_csrf()
     description = request.form["description"]
@@ -117,7 +117,7 @@ def create_kokemus():
         return redirect("/login")
 
     if len(title) > 25 or len(description) > 5000:
-        return render_template("kokemukset.html", error="Otsikon tulee olla enintään 25 merkkiä ja kuvauksen enintään 5000 merkkiä pitkä.")
+        return render_template("experiences.html", error="Otsikon tulee olla enintään 25 merkkiä ja kuvauksen enintään 5000 merkkiä pitkä.")
 
     username = session["username"]
     user_id = items.get_user_id(username)
