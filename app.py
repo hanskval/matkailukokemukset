@@ -66,6 +66,8 @@ def show_kokemus(item_id):
             comment = request.form.get("comment")
             if comment:
                 items.comment_experience(user_id, item_id, comment)
+            else:
+                flash("Kommentti ei voi olla tyhjä")
 
         return redirect("/item/" + str(item_id))
     categories = items.get_categories(item_id)

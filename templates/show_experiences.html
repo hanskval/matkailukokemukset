@@ -52,6 +52,17 @@
         <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
 
         <button type="submit" name="action" value="comment">Lähetä kommentti</button>
+
+        {% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class="flashes">
+      {% for message in messages %}
+        <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+        
     </form>
     <a href="/">Etusivulle</a>
 
