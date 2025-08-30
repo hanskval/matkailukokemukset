@@ -13,9 +13,11 @@
         <a href="/remove_experience/{{ item.id }}">Poista</a>
     </p>
     {% endif %}
-  
+
     <p><strong>Ilmoittaja:</strong> {{ item.username }}</p>
-    <p style="white-space: pre-wrap; overflow-wrap: break-word;"> {{ item.description }} </p>
+    <p style="white-space: pre-wrap; overflow-wrap: break-word; max-width: 50vw;">
+  {{ item.description }}
+</p>
   <p><strong>Arvosana:</strong> {{ item.rating }}</p>
 <p>
   Kategoria:
@@ -60,7 +62,8 @@
   <ul>
     {% for c in comments %}
     <li>
-        <strong>Käyttäjä: {{ c.username }}</strong> <span style="white-space: pre-wrap; overflow-wrap: break-word;">{{ c.comment }}</span>
+        <strong>Käyttäjä: {{ c.username }}</strong> <span style="white-space: pre-wrap; overflow-wrap: break-word;">
+          {{ c.comment }}</span>
         <small style="color: gray;">{{ c.created_at }}</small>
     </li>
     {% endfor %}
