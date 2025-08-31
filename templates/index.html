@@ -1,65 +1,43 @@
 <!DOCTYPE html>
-<html>
 <head>
   <title>Matkailukokemuksia</title>
-  <style>
-    .user-info {
-    position: absolute;
-    top: 10px;
-    right: 20px;
-    text-align: right;
-    }
-    .experience-list {
-    position: absolute;
-    top: 135px;
-    left: 10px;
-    text-align: left;
-    }
-
-  </style>
+  <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
 </head>
 
 <body>
+  <header>
     <h1>Tervetuloa matkailukokemusten pariin!</h1>
-    
-    {% if session.username %}
-  
+    <nav>
       <a href="/experiences">Uusi ilmoitus</a>
-        
-    </div>
-    {% endif %}
       <a href="/find_experiences">Etsi ilmoitus</a>
+      {% if session.username %}
+        <a href="/profile">Profiili</a>
+        <a href="/logout" class="logout">Kirjaudu ulos</a>
+      {% else %}
+        <a href="/login">Kirjaudu sisään</a>
+        <a href="/register">Rekisteröidy</a>
+      {% endif %}
+    </nav>
+  </header>
 
-
-    {% if session.username %}
+  {% if session.username %}
     <div class="user-info">
       <p>Olet kirjautunut nimellä <strong>{{ session.username }}</strong></p>
-      <a href="/logout">Kirjaudu ulos</a>
-      <a href="/profile">Profiili</a>
-      
     </div>
-    {% endif %}
-  </div>
+  {% endif %}
 
-  <p>
-    {% if not session.username %}
-    <div class="user-info">
-    <a href="/login">Kirjaudu sisään</a>
-    <a href="/register">Rekisteröidy</a>
+  <main>
+    <h2>Matkailukokemukset</h2>
+    <div class="experiences">
+      {% if not items %}
+        <p class="empty">Ei matkailukokemuksia.</p>
+      {% endif %}
+      {% for item in items %}
+        <a href="/item/{{ item.id }}" class="experience-card">
+          {{ item.title }}
+        </a>
+      {% endfor %}
     </div>
-    {% endif %}
-  </p>
-  <p>
-  </p>
-  <h2>Matkailukokemukset</h2>
-    <ul class="experience-list">
-    {% if not items %}
-      <li>Ei matkailukokemuksia.</li>
-    {% endif %}
-    {% for item in items %}
-      <li><a href="/item/{{ item.id }}">{{ item.title }}</a></li>
-    {% endfor %}
-  </ul>
+  </main>
 </body>
-
 </html>

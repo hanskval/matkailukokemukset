@@ -1,4 +1,3 @@
-import sqlite3
 from flask import Flask
 from flask import abort
 import secrets
@@ -6,7 +5,6 @@ from flask import redirect, render_template, flash, request, session
 from werkzeug.security import generate_password_hash
 from werkzeug.security import check_password_hash
 
-import db
 import config
 import items
 
