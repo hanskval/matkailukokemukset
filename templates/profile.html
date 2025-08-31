@@ -2,24 +2,9 @@
 <html>
   <link rel="stylesheet" href="/static/main.css">
 <head>
-  <title>Profiili</title>
-  <style>
-    .user-info {
-      position: absolute;
-      top: 10px;
-      right: 20px;
-      text-align: right;
-    }
-    .experience-list {
-      position: absolute;
-      top: 150px;
-      left: 10px;
-      text-align: left;
-    }
-  </style>
-</head>
 
 <body>
+  <header>
   <h1>Profiili</h1>
 
   {% if username %}
@@ -31,7 +16,7 @@
     <a href="/">Etusivu</a>
   </div>
   {% endif %}
-
+</header>
   <h2>Matkailukokemukset</h2>
   <ul class="experience-list">
     {% if not items %}

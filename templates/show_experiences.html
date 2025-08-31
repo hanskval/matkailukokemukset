@@ -3,24 +3,29 @@
   <link rel="stylesheet" href="/static/main.css">
 
 <head>
+
   <title>{{ item.title}}</title>
 </head>
 
 <body>
+  <header>
   <h1>{{ item.title }}</h1>
+
   {% if session.username == item.username %}
     <p>
         <a href="/edit_experience/{{ item.id }}">Muokkaa</a>
         <a href="/remove_experience/{{ item.id }}">Poista</a>
     </p>
     {% endif %}
-
+<body>
+ 
     <p><strong>Ilmoittaja:</strong> {{ item.username }}</p>
-    <p style="white-space: pre-wrap; overflow-wrap: break-word; max-width: 50vw;">
-  {{ item.description }}
+    </header>
+     <p class="description">{{ item.description }}</p>
 </p>
   <p><strong>Arvosana:</strong> {{ item.rating }}</p>
 <p>
+
   Kategoria:
   {% if categories %}
     <span style="white-space: pre-wrap; overflow-wrap: break-word;">{{ categories }}</span>
@@ -46,6 +51,7 @@
 
 {% endif %}
   <p>
+   
     <h3>Jätä kommentti</h3>
     <form method="post">
         <textarea name="comment" rows="4" cols="50" placeholder="Kirjoita kommenttisi tähän..." required></textarea>
@@ -53,6 +59,7 @@
         <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
 
         <button type="submit" name="action" value="comment">Lähetä kommentti</button>
+    </section>
 
         {% with messages = get_flashed_messages() %}
   {% if messages %}

@@ -16,8 +16,10 @@
     <a href="/">Etusivulle</a>
   </p>
   {% else %}
+  <header>
   <form action="/login" method="post">
     <p>
+      
       Tunnus: <br />
       <input type="text" name="username" value="{{ request.form.username }}" required />
     </p>
@@ -29,9 +31,10 @@
       {% endif %}
     </p>
     <input type="submit" value="Kirjaudu" />
-    
+    <header>
     <a href="/">Etusivulle</a>
     <a href="/register">Rekisteröidy</a>
+  </header>
   </form>
   {% endif %}
 </body>

@@ -3,10 +3,10 @@
   <link rel="stylesheet" href="/static/main.css">
   {% if not session.username %}
 <p>
-  <div class="user-info">
+  <header>
     <p>Sinun täytyy kirjautua sisään luodaksesi uuden kokemuksen.</p>
     <a href="/login">Kirjaudu sisään</a>
-  </div>
+  </header>
 </p>
 {% endif %}
 {% if session.username %}
@@ -15,7 +15,8 @@
 </head>
 
 <body>
-  <h1>Uusi ilmoitus</h1>
+  <header>
+  <h1>Uusi kokemus</h1>
   <form action="/create_experience" method="post">
     <p>
       Otsikko: <br />

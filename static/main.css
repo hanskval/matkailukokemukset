@@ -14,9 +14,34 @@ header {
   box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 }
 
+header a {
+  color: white;
+  margin: 0 5px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
 .experiences {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 20px;
   padding: 20px;
+}
+
+ul li {
+  margin-bottom: 12px;
+  padding: 10px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+
+.description {
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    border : 3px solid #ccc;
+    padding: 10px;
+
 }
